@@ -1,0 +1,12 @@
+GET http://localhost:8000/urlshortner/Health
+
+
+###
+POST http://localhost:8000/urlshortner/signup
+content-type: application/json
+
+{
+    "username" : "charanavvaru",
+    "password" : "charan123",
+    "email" : "charanavvaru11@gmail.com"
+}

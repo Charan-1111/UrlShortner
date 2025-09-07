@@ -1,0 +1,37 @@
+{
+    "env" : "LOCAL",
+    "bcryptDefaultCost" : 10,
+    "db_credentials" : {
+        "username" : "root",
+        "password" : "mysql121",
+        "host" : "localhost",
+        "port" : "3306",
+        "database" : "urlshortner"
+    },
+    "database_tables" : {
+        "users_table" : "CREATE TABLE IF NOT EXISTS users(username VARCHAR(50) PRIMARY KEY, password VARCHAR(100) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)",
+        "jwt_data" : "CREATE TABLE IF NOT EXISTS jwt_data(username VARCHAR(50) PRIMARY KEY, jwt_token TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE)"
+    },
+    "queries" : {
+        "select_queries" : {
+            "check_email" : "select count(1) from users where email = ?",
+            "check_username" : "select count(1) from users where username = ?",
+            "get_hashed_password" : "select password from users where username = ? or email = ?",
+            "check_user_jwt" : "select count(1) from jwt_data where username = ? and jwt_token = ?"
+        },
+        "insert_queries" : {
+            "insert_user" : "insert into users (username, password, email) values (?, ?, ?)",
+            "insert_jwt" : "insert into jwt_data(username, jwt_token) values (?, ?)"
+        },
+        "update_queries" : {
+
+        },
+        "delete_queries" : {
+            "delete_jwt" : "delete from jwt_data where username = ? and jwt_token = ?"
+        }
+    },
+    "jwt" : {
+        "jwt_secret_key" : "VNW90NocXHpjgCKwYD1qbQ7xcw90nwDLZJOG76pKJcQGADrP1Px2eLP33QlsWARp",
+        "token_expiry_time" : 15
+    }
+}
