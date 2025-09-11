@@ -21,7 +21,7 @@
         },
         "insert_queries" : {
             "insert_user" : "insert into users (username, password, email) values (?, ?, ?)",
-            "insert_jwt" : "insert into jwt_data(username, jwt_token) values (?, ?)"
+            "insert_jwt" : "insert into jwt_data(username, jwt_token) values (?, ?) as new on duplicate key update jwt_token = new.jwt_token, created_at = CURRENT_TIMESTAMP"
         },
         "update_queries" : {
 

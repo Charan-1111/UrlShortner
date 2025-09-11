@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"goapp/models"
 	"time"
 
@@ -33,4 +34,25 @@ func GenerateJWT(username string) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+func ValidateJWT(tokenString string) (*models.Claims, error) {
+	jwtKey := []byte(models.Config.Jwt.JwtSecretKey)
+	claims := &models.Claims{}
+
+	// Parse the token
+	token, err := jwt.ParseWithClaims(tokenString, claims,
+		func(token *jwt.Token) (any, error) {
+			return jwtKey, nil
+		})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, fmt.Errorf("invalid token")
+	}
+
+	return claims, nil
 }

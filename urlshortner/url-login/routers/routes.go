@@ -36,6 +36,7 @@ func SetUpFiberServer() *fiber.App {
 
 	apiGroup.Post("/signup", handlers.SignUpHandler)
 	apiGroup.Post("/login", handlers.LoginHandler)
-
+	apiGroup.Post("/getnewtoken", handlers.GetNewTokenHandler)
+	apiGroup.Post("/logout", handlers.LogoutHandler)
 	return app
 }
