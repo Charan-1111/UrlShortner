@@ -33,3 +33,8 @@ func main() {
 		fmt.Println("Server started on port 8080")
 	}
 }
+
+// TODO: Add graceful shutdown to the server
+// TODO: Add logging to the server
+// TODO: Add set new password handler
+// TODO: Add forgot password handler
