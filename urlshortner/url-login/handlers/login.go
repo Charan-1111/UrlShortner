@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"goapp/database"
 	"goapp/models"
+	"goapp/utils"
 
 	"goapp/validator"
 
@@ -11,9 +13,13 @@ import (
 
 func LoginHandler(c *fiber.Ctx) error {
 	var (
-		reqBody  models.LoginRequest
-		username string
-		err      error
+		reqBody    models.LoginRequest
+		username   string
+		password   string
+		jtoken     = ""
+		err        error
+		statusCode = fiber.StatusOK
+		errorMsg   = "Login successful"
 	)
 
 	if err = c.BodyParser(&reqBody); err != nil {
@@ -34,5 +40,41 @@ func LoginHandler(c *fiber.Ctx) error {
 	} else {
 		username = reqBody.Email
 	}
-	return nil
+	
+	err = database.DB.QueryRow(models.Config.Queries.SelectQueries.GetHashedPassword, reqBody.Username, reqBody.Email).Scan(&password)
+	if err != nil {
+		fmt.Println("Error getting the password from the database : ", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Error getting the password from the database",
+		})
+	}
+
+	isPassowrdMatched := utils.CheckPasswordHash(reqBody.Password, password)
+
+	if !isPassowrdMatched {
+		statusCode = fiber.StatusUnauthorized
+		errorMsg = "Invalid credentials"
+	} else {
+		// Generatign JWT token
+		jtoken, err = utils.GenerateJWT(username)
+		if err != nil {
+			fmt.Println("Error generating JWT token : ", err)
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Error generating JWT token",
+			})
+		}
+
+		// Inserting the JWT token into the database
+		_, err = database.DB.Exec(models.Config.Queries.InsertQueries.InsertJwt, username, jtoken)
+		if err != nil {
+			fmt.Println("Error inserting JWT token into the database : ", err)
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Error inserting JWT token into the database",
+			})
+		}
+	}
+	return c.Status(statusCode).JSON(fiber.Map{
+		"message": errorMsg,
+		"token":   jtoken,
+	})
 }
