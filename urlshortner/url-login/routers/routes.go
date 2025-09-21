@@ -47,5 +47,6 @@ func SetUpFiberServer() *fiber.App {
 	apiGroup.Post("/login", handlers.LoginHandler)
 	apiGroup.Post("/getnewtoken", handlers.GetNewTokenHandler)
 	apiGroup.Post("/logout", handlers.LogoutHandler)
+	apiGroup.Patch("/updatepassword", handlers.UpdatePasswordHandler)
 	return app
 }
