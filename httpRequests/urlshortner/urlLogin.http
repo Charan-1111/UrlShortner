@@ -10,3 +10,26 @@ content-type: application/json
     "password" : "charan123",
     "email" : "charanavvaru11@gmail.com"
 }
+
+###
+POST http://localhost:8000/urlshortner/login
+content-type: application/json
+
+{
+    "username" : "charanavvaru",
+    "password" : "charan123"
+}
+
+###
+POST http://localhost:8000/urlshortner/getnewtoken
+content-type: application/json
+
+{
+    "username" : "charanavvaru",
+    "jwt_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoYXJhbmF2dmFydSIsImlzcyI6InVybFNob3J0bmVyIiwic3ViIjoidXNlckF1dGgiLCJleHAiOjE3NTc2MTQwODcsImlhdCI6MTc1NzYxMzE4N30.GBQN0DigtTmz-H5e8GyHUOIOC7Da0s6OdBIB45ymzWU"
+}
+
+###
+POST http://localhost:8000/urlshortner/logout
+content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoYXJhbmF2dmFydSIsImlzcyI6InVybFNob3J0bmVyIiwic3ViIjoidXNlckF1dGgiLCJleHAiOjE3NTc2MTUyNTYsImlhdCI6MTc1NzYxNDM1Nn0.veDHPc0IbJiD3dYZQ2UU-6hWemYA4FUBka1MHP69zV4
